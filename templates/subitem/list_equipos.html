@@ -1,0 +1,107 @@
+{% extends 'base_template.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-3"></div>
+        <div class="col-6">
+            {% include 'nav_equipos.html' %}
+        </div>
+        <div class="col-3"></div>
+    </div>
+    <div class="row">
+        <div class="col-3"></div>
+        <div class="col-6">
+            <h4>Ingrese un Nuevo Equipo</h4>
+            <form action="" method="post">
+                <label class="text-left" for="modelo">Modelo</label>
+                <select name="modelo" id="" class="form-control mb-2" required>
+                    {% for modelo in modelos %}
+                        <option value="{{modelo.id}}">{{modelo.modelo}}</option>
+                    {% endfor %}
+                </select>
+
+                <label for="marca">Marca</label>
+                <select name="marca" id="" class="form-control mb-2" required>
+                    {% for marca in marcas %}
+                        <option value="{{marca.id}}">{{marca.nombre}}</option>
+                    {% endfor %}
+                </select>
+
+                <label for="categoria">Categoria</label>
+                <select name="categoria" id="" class="form-control mb-2" required>
+                    {% for categoria in categorias %}
+                        <option value="{{categoria.id}}">{{categoria.nombre}}</option>
+                    {% endfor %}
+                </select>
+
+                <label for="precio">Precio</label>
+                <input type="number" name="precio" class="form-control mb-2" placeholder="Precio" required>
+
+                <label for="caracteristicas">Caracteristicas</label>
+                <select name="caracteristicas" id="" class="form-control mb-2" required>
+                    {% for caracteristica in caracteristicas %}
+                        <option value="{{caracteristica.id}}">
+                            {{ caracteristica.nombre }} - {{ caracteristica.descripcion }}
+                        </option>
+                    {% endfor %}
+                </select>
+
+                <label for="proveedor">Proveedor</label>
+                <select name="proveedor" id="" class="form-control mb-2" required>
+                    {% for proveedor in proveedores %}
+                        <option value="{{proveedor.id}}">{{proveedor.nombre}}</option>
+                    {% endfor %}
+                </select>
+
+                <button type="submit" class="btn btn-success">Guardar</button>
+            </form>
+        </div>
+        <div class="col-3"></div>
+    </div>
+    <div class="row mt-5">
+        <div class="col-12 text-center">
+            <h4>Listado de Equipos</h4>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Modelo</th>
+                        <th>Marca</th>
+                        <th>Categoria</th>
+                        <th>Precio</th>
+                        <th>Caracteristicas</th>
+                        <th>Descripcion</th>
+                        <th>Proveedor</th>                        
+                        <th>Editar</th>
+                        <th>Borrar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for equipo in equipos %}
+                    <tr>
+                        <td>{{ equipo.modelo.modelo }}</td>
+                        <td><a href="{{ url_for('equipos_by_marca', id=equipo.marca.id) }}"> {{ equipo.marca.nombre }} </a></td>
+                        <td><a href="{{ url_for('equipos_by_categoria', id=equipo.categoria.id) }}">{{ equipo.categoria.nombre }}</a></td>
+                        <td>{{ equipo.precio }}</td>
+                        <td>{{ equipo.caracteristicas.nombre }}</td>
+                        <td>{{ equipo.caracteristicas.descripcion }}</td>
+                        <td><a href="{{ url_for('equipos_by_proveedor', id=equipo.proveedor.id) }}">{{ equipo.proveedor.nombre }}</a></td>
+                        <td><a href="{{ url_for('equipo_editar', id=equipo.id) }}" class="btn btn-success">Editar</a></td>
+                        <td>
+                            <form action="{{ url_for('eliminar_equipo', id=equipo.id) }}" method="POST" onsubmit="return confirm('¿Estás seguro de que quieres borrar este equipo?');">
+                                <button type="submit" class="btn btn-danger">Borrar</button>
+                            </form>
+                        </td>                    
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class="col-12">
+            <a href="{{ url_for('equipos_inactivos') }}" class="btn btn-secondary mb-2">Ver Equipos Inactivos</a>
+        </div>
+    </div>    
+</div>
+{% endblock %}
